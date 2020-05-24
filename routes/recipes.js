@@ -1,19 +1,25 @@
 const express = require('express')
 const router = express.Router()
+const auth = require('../middleware/auth')
+const { check, validationResult } = require('express-validator/check')
 
-// @route           GET api/recipes
-// @description     Get all recipes
-// @access          Public 
-router.get('/', (req, res) => {
-    res.send('Get all recipes')
-})
+const User = require('../models/User')
+const Recipe = require('../models/Recipe')
 
-// @route           GET api/myrecipes
-// @description     Get all logged in user recipes
-// @access          Private 
-router.get('/', (req, res) => {
-    res.send('Get all logged in user recipes')
-})
+// @route    GET api/recipes
+// @desc     Get all recipes
+// @access   Private
+router.get('/', auth, async (req, res) => {
+	try {
+		const recipes = await Recipe.find({ user: req.user.id }).sort({
+			date: -1
+		});
+		res.json(recipes);
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('Server Error');
+	}
+});
 
 // @route           POST api/recipes
 // @description     Create new recipe
