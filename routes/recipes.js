@@ -24,22 +24,101 @@ router.get('/', auth, async (req, res) => {
 // @route           POST api/recipes
 // @description     Create new recipe
 // @access          Private 
-router.post('/', (req, res) => {
-    res.send('Create new recipe')
+router.post('/', [ auth, [
+    check('name', 'name is required').not().isEmpty(),
+    check('image', 'image is required').not().isEmpty(),
+    check('ingredients', 'ingredients is required').not().isEmpty(),
+    check('method', 'method is required').not().isEmpty()
+]
+], async (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array()})
+    }
+
+    const { name, description, image, ingredients, method, tags } = req.body
+
+    try {
+        const newRecipe = new Recipe({
+            user: req.user.id,
+            name,
+            description,
+            image,
+            ingredients,
+            method,
+            tags
+        })
+
+        const recipe = await newRecipe.save()
+        res.json(recipe)
+    } catch (error) {
+        console.error(err.message);
+		res.status(500).send('Server Error');
+    }
 })
 
-// @route           PUT api/myrecipes/:id
+// @route           PUT api/recipes/:id
 // @description     Update recipe
 // @access          Private 
-router.put('/:id', (req, res) => {
-    res.send('Update recipe')
-})
+router.put('/:id', auth, async (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty())
+		return res.status(400).json({ errors: errors.array() });
 
-// @route           DELETE api/myrecipes/:id
+	const { name, description, image, ingredients, method, tags } = req.body;
+
+	// Build contact object
+	const recipeFields = {};
+	if (name) recipeFields.name = name;
+	if (description) recipeFields.description = description;
+	if (image) recipeFields.image = image;
+    if (ingredients) recipeFields.ingredients = ingredients;
+    if (method) recipeFields.method = method;
+	if (tags) recipeFields.tags = tags;
+
+
+	try {
+		let recipe = await Recipe.findById(req.params.id);
+
+		if (!recipe) return res.status(404).json({ msg: 'Recipe not found' });
+
+		// Make sure user owns recipe
+		if (recipe.user.toString() !== req.user.id)
+			return res.status(401).json({ msg: 'Not authorized' });
+
+		recipe = await Recipe.findByIdAndUpdate(
+			req.params.id,
+			{ $set: recipeFields },
+			{ new: true }
+		);
+
+		res.json(recipe);
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('Server error');
+	}
+});
+
+// @route           DELETE api/recipes/:id
 // @description     Edit a recipe
 // @access          Private 
-router.delete('/:id', (req, res) => {
-    res.send('Delete recipe')
-})
+router.delete('/:id', auth, async (req, res) => {
+	try {
+		const recipe = await Recipe.findById(req.params.id);
+
+		if (!recipe) return res.status(404).json({ msg: 'Recipe not found' });
+
+		// Make sure user owns recipe
+		if (recipe.user.toString() !== req.user.id)
+			return res.status(401).json({ msg: 'Not authorized' });
+
+		await Recipe.findByIdAndRemove(req.params.id);
+
+		res.json({ msg: 'Recipe deleted' });
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('Server error');
+	}
+});
 
 module.exports = router

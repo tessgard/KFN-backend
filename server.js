@@ -16,8 +16,13 @@ res.json({ msg: 'welcome to the Kind Food Network API'})
 )
 
 app.get('/allrecipes', async (req, res) => {
-    const allRecipes = await Recipe.find()
+    try {
+		const allRecipes = await Recipe.find()
     res.json(allRecipes)
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('Server Error');
+	}
 })
 
 // Define Routes
