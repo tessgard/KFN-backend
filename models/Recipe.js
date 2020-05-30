@@ -11,21 +11,76 @@ const RecipeSchema = mongoose.Schema({
     },
     description: {
         type: String,
+        required: true
     },
     image: {
         type: String,
+    },
+    servings: {
+        type: Number,
+    },
+    cookTimeHours: {
+        type: Number,
+    },
+    cookTimeMinutes: {
+        type: Number,
+    },
+    prepTimeHours: {
+        type: Number,
+    },
+    prepTimeMinutes: {
+        type: Number,
+    },
+    ingredient1: {
+        type: String,
         required: true
     },
-    ingredients: {
-        type: Array,
-        required: true
+    ingredient2: {
+        type: String,
     },
-    method: {
-        type: Array,
+    ingredient3: {
+        type: String,
+    },
+    ingredient4: {
+        type: String,
+    },
+    ingredient5: {
+        type: String,
+    },
+    ingredient6: {
+        type: String,
+    },
+    ingredient7: {
+        type: String,
+    },
+    ingredient8: {
+        type: String,
+    },
+    ingredient9: {
+        type: String,
+    },
+    ingredient10: {
+        type: String,
+    },
+    method1: {
+        type: String,
         require: true
     },
-    tags: {
-        type: Array,
+    method2: {
+        type: String,
+    },
+    method3: {
+        type: String,
+    },
+    method4: {
+        type: String,
+    },
+    method5: {
+        type: String,
+    },
+    category: {
+        type: String,
+        require: true
     },
     dateCreated: {
         type: Date,
