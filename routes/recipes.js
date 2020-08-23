@@ -41,26 +41,8 @@ router.post('/', [ auth, [
 		name,
 		description,
 		image,
-		servings,
-		cookTimeHours,
-		cookTimeMinutes,
-		prepTimeHours,
-		prepTimeMinutes,
 		ingredient1,
-		ingredient2,
-		ingredient3,
-		ingredient4,
-		ingredient5,
-		ingredient6,
-		ingredient7,
-		ingredient8,
-		ingredient9,
-		ingredient10, 
 		method1, 
-		method2,
-		method3,
-		method4,
-		method5,
 		category } = req.body
 
     try {
@@ -69,26 +51,8 @@ router.post('/', [ auth, [
             name,
             description,
             image,
-            servings,
-			cookTimeHours,
-			cookTimeMinutes,
-			prepTimeHours,
-			prepTimeMinutes,
 			ingredient1,
-			ingredient2,
-			ingredient3,
-			ingredient4,
-			ingredient5,
-			ingredient6,
-			ingredient7,
-			ingredient8,
-			ingredient9,
-			ingredient10, 
 			method1, 
-			method2,
-			method3,
-			method4,
-			method5,
             category
         })
 
@@ -112,26 +76,9 @@ router.put('/:id', auth, async (req, res) => {
 		name, 
 		description, 
 		image, 
-		servings,
-		cookTimeHours,
-		cookTimeMinutes,
-		prepTimeHours,
-		prepTimeMinutes,
+		servings,	
 		ingredient1,
-		ingredient2,
-		ingredient3,
-		ingredient4,
-		ingredient5,
-		ingredient6,
-		ingredient7,
-		ingredient8,
-		ingredient9,
-		ingredient10, 
 		method1, 
-		method2,
-		method3,
-		method4,
-		method5,
 		category } = req.body;
 
 	// Build recipe object
@@ -140,27 +87,9 @@ router.put('/:id', auth, async (req, res) => {
 	if (description) recipeFields.description = description
 	if (image) recipeFields.image = image
 	if (servings) recipeFields.servings = servings
-	if (cookTimeHours) recipeFields.cookTimeHours = cookTimeHours
-	if (cookTimeMinutes) recipeFields.cookTimeMinutes = cookTimeMinutes
-	if (prepTimeHours) recipeFields.prepTimeHours = prepTimeHours
-	if (prepTimeMinutes) recipeFields.prepTimeMinutes = prepTimeMinutes
 	if (ingredient1) recipeFields.ingredient1 = ingredient1
-	if (ingredient2) recipeFields.ingredient2 = ingredient2
-	if (ingredient3) recipeFields.ingredient3 = ingredient3
-	if (ingredient4) recipeFields.ingredient4 = ingredient4
-	if (ingredient5) recipeFields.ingredient5 = ingredient5
-	if (ingredient6) recipeFields.ingredient6 = ingredient6
-	if (ingredient7) recipeFields.ingredient7 = ingredient7
-	if (ingredient8) recipeFields.ingredient8 = ingredient8
-	if (ingredient9) recipeFields.ingredient9 = ingredient9
-	if (ingredient10) recipeFields.ingredient10 = ingredient10
 	if (method1) recipeFields.method1 = method1
-	if (method2) recipeFields.method2 = method2
-	if (method3) recipeFields.method3 = method3
-	if (method4) recipeFields.method4 = method4
-	if (method5) recipeFields.method5 = method5
 	if (category) recipeFields.category = category;
-
 
 	try {
 		let recipe = await Recipe.findById(req.params.id);
